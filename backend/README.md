@@ -65,6 +65,40 @@ To force the HTTPS profile:
 dotnet run --project src/Redington.ProbabilityCalculator.Api --launch-profile https
 ```
 
+## Configuration
+
+All settings live in `appsettings.json` and can be overridden per environment or via environment variables (ASP.NET Core's standard hierarchical key syntax: `Section__Key`).
+
+### CORS allowed origins
+
+`Cors:AllowedOrigins` — the list of origins the API will accept cross-origin requests from.
+
+Default (set in `appsettings.json`):
+
+```json
+"Cors": {
+  "AllowedOrigins": [
+    "http://localhost:5173",
+    "http://localhost:4173"
+  ]
+}
+```
+
+These defaults cover the Vite dev server (`5173`) and preview server (`4173`) so the frontend works out of the box without any extra setup. Override for other environments:
+
+```json
+// appsettings.Production.json
+"Cors": {
+  "AllowedOrigins": [ "https://your-deployed-frontend.example.com" ]
+}
+```
+
+Or as an environment variable:
+
+```pwsh
+$env:Cors__AllowedOrigins__0 = "https://your-deployed-frontend.example.com"
+```
+
 ## API
 
 ### `POST /api/calculations`
@@ -153,4 +187,4 @@ Routing is configured in `appsettings.json`. Audit events are tagged with an `Ev
 - No authentication, persistence, or rate limiting — intentionally out of scope for this exercise.
 - Audit records are file-based; a production system would typically use a centralized/queryable sink.
 - The operational log file is currently unbounded (no retention cap), unlike the audit file.
-- CORS is open to the local React dev origin (`http://localhost:5173`) only.
+- CORS allowed origins default to the local Vite dev and preview ports and are configurable via `Cors:AllowedOrigins` in `appsettings.json` (see [Configuration](#configuration)); no code change is needed to add a deployed frontend origin.

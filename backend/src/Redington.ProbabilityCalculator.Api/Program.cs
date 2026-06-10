@@ -36,11 +36,16 @@ builder.Services.AddScoped<IValidator<CalculationRequestDto>, CalculationRequest
 builder.Services.AddHealthChecks();
 
 // Allow the React dev frontend to call the API during local development.
+// Origins are configured via "Cors:AllowedOrigins" in appsettings.json;
+// the defaults cover the Vite dev server (5173) and preview server (4173).
 const string FrontendCorsPolicy = "FrontendCorsPolicy";
+var allowedOrigins = builder.Configuration
+    .GetSection("Cors:AllowedOrigins")
+    .Get<string[]>() ?? ["http://localhost:5173", "http://localhost:4173"];
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(FrontendCorsPolicy, policy =>
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins(allowedOrigins)
             .AllowAnyHeader()
             .AllowAnyMethod());
 });
