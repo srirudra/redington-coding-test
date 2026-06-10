@@ -1,0 +1,31 @@
+{
+  "name": "redington-probability-calculator",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Monorepo root scripts for the Probability Calculator (ASP.NET Core API + React frontend).",
+  "scripts": {
+    "postinstall": "cd frontend && npm install",
+
+    "start": "concurrently --names api,ui --prefix-colors blue,green --kill-others-on-fail \"npm run start:api\" \"npm run start:ui\"",
+    "start:api": "dotnet run --project backend/src/Redington.ProbabilityCalculator.Api",
+    "start:ui": "npm --prefix frontend run dev -- --open",
+
+    "build": "npm run build:api && npm run build:ui",
+    "build:api": "dotnet build backend/Redington.ProbabilityCalculator.sln --configuration Release --nologo",
+    "build:ui": "npm --prefix frontend run build",
+
+    "test": "npm run test:api && npm run test:ui",
+    "test:api": "dotnet test backend/Redington.ProbabilityCalculator.sln --nologo",
+    "test:ui": "npm --prefix frontend run test",
+
+    "test:coverage": "npm run test:coverage:api && npm run test:coverage:ui",
+    "pretest:coverage:api": "dotnet tool restore",
+    "test:coverage:api": "dotnet test backend/Redington.ProbabilityCalculator.sln --collect:\"XPlat Code Coverage\" --results-directory coverage/dotnet --nologo",
+    "posttest:coverage:api": "dotnet tool run reportgenerator -- -reports:coverage/dotnet/**/*.cobertura.xml -targetdir:coverage/dotnet/report -reporttypes:TextSummary && node -e \"const fs=require('fs');process.stdout.write(fs.readFileSync('coverage/dotnet/report/Summary.txt','utf8'))\"",
+    "test:coverage:ui": "npm --prefix frontend run test:coverage"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
+
