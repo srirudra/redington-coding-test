@@ -34,6 +34,14 @@
   border-radius: 8px;
   background: var(--input-bg, #ffffff);
   color: inherit;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.field input[type='number']::-webkit-outer-spin-button,
+.field input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .field input[aria-invalid='true'] {
