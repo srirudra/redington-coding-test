@@ -1,43 +1,51 @@
 # REDINGTON Probability Calculator
 
-A small C# and React coding test project for calculating probabilities using two supported operations:
+A C# and React coding test project that calculates a result from two probabilities using one of two operations:
 
 - `CombinedWith`: $P(A) \times P(B)$
 - `Either`: $P(A) + P(B) - P(A) \times P(B)$
 
-## Purpose
+## Architecture
 
-This repository is being set up as a lightweight but professional solution that demonstrates:
+| Layer | Technology |
+|---|---|
+| Frontend | React 18 + TypeScript, Vite, Vitest |
+| Backend | ASP.NET Core 9 Minimal API, FluentValidation, Serilog |
+| Domain | `Probability` value object, strategy per operation |
 
-- clear structure
-- maintainable code
-- validation at the boundary
-- domain modelling
-- testability
-- practical scalability thinking
+The `[0, 1]` invariant is enforced at the API boundary (field validation) and inside the `Probability` value object (domain invariant). Each operation is an independent strategy; adding a new one does not modify existing code.
 
-## Planned Solution
+For deeper detail see [backend/README.md](backend/README.md) and [frontend/README.md](frontend/README.md).
 
-The intended solution is:
+## Prerequisites
 
-- a React frontend for entering two probabilities, selecting a calculation type, and showing the result
-- an ASP.NET Core backend for validation and calculation execution
-- a small domain model centered on a `Probability` value object
-- unit tests and targeted API/frontend tests
-- simple file-based audit logging for the coding test
+- [.NET SDK 9.0](https://dotnet.microsoft.com/download)
+- [Node.js 22](https://nodejs.org/) — version pinned in `.nvmrc`; use `nvm use` if you have nvm installed
 
-## Planned Architecture
+## Quick start
 
-The target architecture is intentionally lightweight:
+```pwsh
+npm install   # installs root deps and frontend deps (via postinstall)
+npm start     # starts API on http://localhost:3000 and UI on http://localhost:5173
+```
 
-- frontend: React with TypeScript
-- backend: ASP.NET Core Minimal API in C#
-- domain: probability value object plus calculation strategies
-- validation: request validation at the API boundary plus domain invariants
-- operations: simple logging, container support, and CI as follow-on work
+Both processes run concurrently; killing either stops the other.
 
-## Notes
+## Commands
 
-- This project is intended to stay simple for the exercise and avoid unnecessary infrastructure such as authentication, a database, or microservices.
-- The design will still aim to show how the solution could evolve for higher scale, reliability, and internal enterprise use.
-  
+| Command | What it does |
+|---|---|
+| `npm start` | Run API + UI concurrently |
+| `npm run start:api` | Run API only |
+| `npm run start:ui` | Run UI only |
+| `npm test` | Run all backend and frontend tests |
+| `npm run test:api` | Backend tests only |
+| `npm run test:ui` | Frontend tests only |
+| `npm run test:coverage` | Coverage for both; prints a text summary for the API |
+| `npm run build` | Production build of API and UI |
+
+## Known limitations
+
+- No authentication, persistence, or rate limiting — intentionally out of scope for this exercise.
+- Audit records are file-based; a production system would use a centralized, queryable sink.
+- Container support and CI are follow-on work.

@@ -24,10 +24,18 @@ validation errors are surfaced against the relevant input.
 
 ## Prerequisites
 
-- Node.js 20.19+ or 22.12+ recommended (developed on Node 21).
+- Node.js 22 — version pinned in the repo's `.nvmrc`; run `nvm use` from the repo root if you have nvm installed.
 - The backend API running locally (see [../backend/README.md](../backend/README.md)).
 
 ## Setup
+
+Install from the **repo root** (covers frontend deps automatically via `postinstall`):
+
+```pwsh
+npm install
+```
+
+Or install directly from the `frontend` folder:
 
 ```pwsh
 npm install
