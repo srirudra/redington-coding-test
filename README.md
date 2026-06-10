@@ -8,7 +8,7 @@ A C# and React coding test project that calculates a result from two probabiliti
 ## Architecture
 
 | Layer | Technology |
-|---|---|
+| --- | --- |
 | Frontend | React 18 + TypeScript, Vite, Vitest |
 | Backend | ASP.NET Core 9 Minimal API, FluentValidation, Serilog |
 | Domain | `Probability` value object, strategy per operation |
@@ -47,10 +47,12 @@ This builds and runs two containers with no extra configuration:
 
 The frontend waits for the backend health check to pass before starting. Audit and operational logs persist in a named `backend-logs` volume. Separate Dockerfiles let the frontend and backend be built, scaled, and deployed independently in the cloud.
 
+For how this deploys, scales, and updates in production (Azure-first, with an AWS alternative and Terraform structure), see [docs/cloud-deployment.md](docs/cloud-deployment.md). For the build and release pipeline design, see [docs/azure-devops-cicd.md](docs/azure-devops-cicd.md).
+
 ## Commands
 
 | Command | What it does |
-|---|---|
+| --- | --- |
 | `npm start` | Run API + UI concurrently |
 | `npm run start:api` | Run API only |
 | `npm run start:ui` | Run UI only |
