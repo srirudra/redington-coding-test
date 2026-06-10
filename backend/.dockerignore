@@ -1,0 +1,10 @@
+# Build artefacts and local-only files that must not enter the image context.
+**/bin/
+**/obj/
+**/logs/
+tests/
+.vs/
+*.user
+README.md
+Dockerfile
+.dockerignore

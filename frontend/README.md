@@ -79,6 +79,30 @@ npm run build     # type-check and produce a production bundle in dist/
 npm run preview   # serve the production build locally
 ```
 
+## Run with Docker
+
+The frontend has a multi-stage [Dockerfile](Dockerfile): it builds the SPA with
+Node, then serves the static bundle with nginx. nginx also reverse-proxies
+`/api/*` to the backend container (see [nginx.conf](nginx.conf)), so the browser
+talks to a single origin and no CORS configuration is required.
+
+Run both containers together from the repo root:
+
+```pwsh
+npm run docker
+```
+
+The UI is then served at `http://localhost:8080`. The image is built with an
+empty `VITE_API_BASE_URL` so the SPA issues same-origin `/api/...` requests; the
+local dev server still uses `http://localhost:3000` by default. See the
+[root README](../README.md#run-with-docker) for details.
+
+> Build note: the image install step runs `npm install` (not `npm ci`) after
+> dropping the lockfile, to work around an npm optional-dependencies bug
+> (npm/cli#4828) that otherwise omits the Linux-native Rollup binary. This trades
+> strict lockfile reproducibility for a reliable cross-platform build; local
+> development still uses the committed lockfile.
+
 ## Project layout
 
 ```text

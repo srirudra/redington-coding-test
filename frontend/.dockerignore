@@ -1,0 +1,10 @@
+# Local-only files that must not enter the image context.
+node_modules/
+dist/
+coverage/
+.env
+.env.*
+!.env.example
+*.log
+Dockerfile
+.dockerignore

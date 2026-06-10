@@ -31,6 +31,22 @@ npm start     # starts API on http://localhost:3000 and UI on http://localhost:5
 
 Both processes run concurrently; killing either stops the other.
 
+## Run with Docker
+
+Requires Docker Desktop (or a Docker Engine with Compose v2). From the repo root:
+
+```pwsh
+npm run docker      # build and start both containers
+npm run docker:down # stop and remove them
+```
+
+This builds and runs two containers with no extra configuration:
+
+- **UI** — nginx serving the built SPA at `http://localhost:8080`. API calls go to the same origin (`/api/...`) and nginx reverse-proxies them to the backend, so no CORS setup is needed.
+- **API** — also published at `http://localhost:3000` for direct access (e.g. `curl`).
+
+The frontend waits for the backend health check to pass before starting. Audit and operational logs persist in a named `backend-logs` volume. Separate Dockerfiles let the frontend and backend be built, scaled, and deployed independently in the cloud.
+
 ## Commands
 
 | Command | What it does |
@@ -43,9 +59,11 @@ Both processes run concurrently; killing either stops the other.
 | `npm run test:ui` | Frontend tests only |
 | `npm run test:coverage` | Coverage for both; prints a text summary for the API |
 | `npm run build` | Production build of API and UI |
+| `npm run docker` | Build and run both containers via Docker Compose |
+| `npm run docker:down` | Stop and remove the containers |
 
 ## Known limitations
 
 - No authentication, persistence, or rate limiting — intentionally out of scope for this exercise.
-- Audit records are file-based; a production system would use a centralized, queryable sink.
-- Container support and CI are follow-on work.
+- Audit records are file-based (persisted to a Docker volume when containerised); a production system would use a centralized, queryable sink.
+- CI is follow-on work.

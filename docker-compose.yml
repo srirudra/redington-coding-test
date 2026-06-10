@@ -1,0 +1,40 @@
+# Runs the Probability Calculator as two containers with zero extra setup:
+#   npm run docker   (from the repo root)
+#
+# - frontend: nginx serving the built SPA on http://localhost:8080 and
+#   reverse-proxying /api/* to the backend (so no CORS configuration is needed).
+# - backend:  ASP.NET Core API, also published on http://localhost:3000 for
+#   direct access (curl, Swagger-style probing, debugging).
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "3000:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    volumes:
+      # Persist audit/operational logs outside the container lifecycle.
+      - backend-logs:/app/logs
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        # Empty base URL => the SPA calls the same origin (/api/...), which
+        # nginx proxies to the backend service.
+        VITE_API_BASE_URL: ""
+    ports:
+      - "8080:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  backend-logs:

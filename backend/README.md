@@ -65,6 +65,25 @@ To force the HTTPS profile:
 dotnet run --project src/Redington.ProbabilityCalculator.Api --launch-profile https
 ```
 
+## Run with Docker
+
+The API ships with a multi-stage [Dockerfile](Dockerfile) (SDK build stage, ASP.NET runtime stage). The simplest way to run it alongside the frontend is the root Compose setup:
+
+```pwsh
+# from the repo root
+npm run docker
+```
+
+To build and run only the API container:
+
+```pwsh
+# from the backend folder
+docker build -t probability-api .
+docker run --rm -p 3000:8080 probability-api
+```
+
+The container listens on port `8080` (`ASPNETCORE_URLS`) and runs with `ASPNETCORE_ENVIRONMENT=Production`. Under Compose the host maps it to `3000`, and a `/health` health check gates frontend startup. See the [root README](../README.md#run-with-docker) for the full two-container flow.
+
 ## Configuration
 
 All settings live in `appsettings.json` and can be overridden per environment or via environment variables (ASP.NET Core's standard hierarchical key syntax: `Section__Key`).
