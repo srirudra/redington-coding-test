@@ -81,4 +81,24 @@ public sealed class CalculationsEndpointTests : IClassFixture<WebApplicationFact
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
+
+    [Fact]
+    public async Task Post_Should_AcceptScientificNotation_When_BodyUsesExponentialNumber()
+    {
+        var client = _factory.CreateClient();
+
+        // 1.8e-2 == 0.018; JSON numbers in exponential form are accepted.
+        using var content = new StringContent(
+            """{"firstProbability":1.8e-2,"secondProbability":0.5,"calculationType":"CombinedWith"}""",
+            System.Text.Encoding.UTF8,
+            "application/json");
+
+        var response = await client.PostAsync("/api/calculations", content);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var body = await response.Content.ReadFromJsonAsync<CalculationResponse>(JsonOptions);
+        Assert.NotNull(body);
+        Assert.Equal(0.009m, body!.Result);
+    }
 }

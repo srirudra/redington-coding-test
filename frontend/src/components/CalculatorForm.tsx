@@ -5,7 +5,7 @@ import {
   calculate,
 } from '../api/calculationApi'
 import type { CalculationResult, CalculationType } from '../api/types'
-import { validateProbability } from '../validation'
+import { PROBABILITY_MAX_LENGTH, validateProbability } from '../validation'
 import './CalculatorForm.css'
 
 interface FieldErrors {
@@ -140,6 +140,7 @@ export function CalculatorForm() {
           step="any"
           min={0}
           max={1}
+          maxLength={PROBABILITY_MAX_LENGTH}
           placeholder="0 to 1"
           value={firstProbability}
           onChange={(event) => handleFirstProbabilityChange(event.target.value)}
@@ -165,6 +166,7 @@ export function CalculatorForm() {
           step="any"
           min={0}
           max={1}
+          maxLength={PROBABILITY_MAX_LENGTH}
           placeholder="0 to 1"
           value={secondProbability}
           onChange={(event) =>

@@ -5,7 +5,8 @@ probabilities and an operation, calls the backend API, and displays the result.
 
 ## What it does
 
-- Enter two probabilities (each in the inclusive range `[0, 1]`).
+- Enter two probabilities (each in the inclusive range `[0, 1]`). Plain decimals
+  (`0.018`) and scientific notation (`1.8e-2`) are both accepted.
 - Choose an operation:
   - **Combined with**: `P(A) × P(B)`
   - **Either**: `P(A) + P(B) − P(A) × P(B)`
@@ -109,3 +110,7 @@ frontend/
 `calculationType` is the string enum `CombinedWith` or `Either`. A `200` response
 returns the calculation `result`; a `400` response returns an RFC 7807
 `ValidationProblemDetails` with field-specific messages.
+
+## Known limitations
+
+- Probability inputs are capped at 128 characters, enforced both by the input `maxLength` and by client-side validation. The cap is a generous guard against pathologically long input rather than a domain rule; the backend remains the source of truth for numeric range validation.

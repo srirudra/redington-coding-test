@@ -113,7 +113,8 @@ Request body:
 }
 ```
 
-- `firstProbability`, `secondProbability`: decimals in `[0, 1]`.
+- `firstProbability`, `secondProbability`: decimals in `[0, 1]`. JSON numbers in
+  exponential form (e.g. `1.8e-2`) are accepted.
 - `calculationType`: string enum — `CombinedWith` or `Either`.
 
 Success response (`200 OK`):
